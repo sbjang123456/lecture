@@ -1,0 +1,11 @@
+{
+  "name": "root",
+  "private": true,
+  "dependencies": {
+    "nx": "^17.0.2"
+  },
+  "devDependencies": {
+    "lerna": "^7.4.2"
+  },
+  "packageManager": "pnpm@8.10.0+sha1.77d568bacf41eeefd6695a7087c1282433955b5c"
+}

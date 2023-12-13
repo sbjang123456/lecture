@@ -1,0 +1,109 @@
+{
+  "graph": {
+    "nodes": {
+      "a": {
+        "name": "a",
+        "type": "lib",
+        "data": {
+          "root": "packages/a",
+          "sourceRoot": "packages/a",
+          "name": "a",
+          "projectType": "library",
+          "targets": {
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "configurations": {}
+            },
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "configurations": {}
+            },
+            "test": {
+              "dependsOn": [
+                "build"
+              ],
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "configurations": {}
+            },
+            "nx-release-publish": {
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "executor": "@nx/js:release-publish",
+              "options": {},
+              "configurations": {}
+            }
+          },
+          "implicitDependencies": [],
+          "tags": []
+        }
+      },
+      "b": {
+        "name": "b",
+        "type": "lib",
+        "data": {
+          "root": "packages/b",
+          "sourceRoot": "packages/b",
+          "name": "b",
+          "projectType": "library",
+          "targets": {
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "configurations": {}
+            },
+            "test": {
+              "dependsOn": [
+                "build"
+              ],
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "configurations": {}
+            },
+            "nx-release-publish": {
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "executor": "@nx/js:release-publish",
+              "options": {},
+              "configurations": {}
+            }
+          },
+          "implicitDependencies": [],
+          "tags": []
+        }
+      }
+    },
+    "dependencies": {
+      "a": [
+        {
+          "source": "a",
+          "target": "b",
+          "type": "static"
+        }
+      ],
+      "b": []
+    }
+  },
+  "affectedProjects": [],
+  "criticalPath": []
+}
