@@ -1,2 +1,2 @@
 fastcampus
-- [test](./turbo-example)
+- [test](./turborepo-example)
