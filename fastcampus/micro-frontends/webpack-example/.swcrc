@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json.schemastore.org/swcrc",
+  "env": {
+    "targets": "last 1 Chrome versions"
+  }
+}
