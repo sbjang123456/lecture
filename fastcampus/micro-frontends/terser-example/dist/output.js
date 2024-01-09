@@ -1,0 +1,1 @@
+function abc(o){console.log("world",o)}
