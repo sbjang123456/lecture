@@ -36,7 +36,11 @@ export default function PostForm() {
           title,
           summary,
           content,
-          updatedAt: new Date().toLocaleDateString(),
+          updatedAt: new Date().toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
         });
         toast.success("게시글이 수정되었습니다.");
         navigate(`/posts/${post.id}`);
@@ -46,7 +50,11 @@ export default function PostForm() {
           title,
           summary,
           content,
-          createdAt: new Date().toLocaleDateString(),
+          createdAt: new Date().toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
           email: user?.email,
           uid: user?.uid,
         });
@@ -120,7 +128,11 @@ export default function PostForm() {
         />
       </div>
       <div className="form__block">
-        <input type="submit" value={post ? '수정' : "제출"} className="form__btn--submit" />
+        <input
+          type="submit"
+          value={post ? "수정" : "제출"}
+          className="form__btn--submit"
+        />
       </div>
     </form>
   );
