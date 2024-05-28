@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "firebaseApp";
+import AuthContext from "context/AuthContext";
 
 interface PostListProps {
   hasNavigation?: boolean;
@@ -7,8 +10,32 @@ interface PostListProps {
 
 type TabType = "all" | "my";
 
+interface PostProps {
+  id: string;
+  title: string;
+  email: string;
+  summary: string;
+  content: string;
+  createdAt: string;
+}
+
 export default function PostList({ hasNavigation = true }: PostListProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  const { user } = useContext(AuthContext);
+
+  const getPosts = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    querySnapshot.forEach((doc) => {
+      const dataObj = { ...doc.data(), id: doc.id };
+      setPosts((prev) => [...prev, dataObj as PostProps]);
+    });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <>
       {hasNavigation && (
@@ -30,23 +57,31 @@ export default function PostList({ hasNavigation = true }: PostListProps) {
         </div>
       )}
       <div className="post__list">
-        {[...Array(10)].map((_, i) => (
-          <div key={i} className="post__box">
-            <Link to={`/posts/${i}`}>
-              <div className="post__profile-box">
-                <div className="post__profile" />
-                <div className="post__author-name">author</div>
-                <div className="post__date">date</div>
-              </div>
-              <div className="post__title">title</div>
-              <div className="post__text">contents</div>
-              <div className="post__utils-box">
-                <div className="post__delete">삭제</div>
-                <div className="post__edit">수정</div>
-              </div>
-            </Link>
-          </div>
-        ))}
+        {posts?.length > 0 ? (
+          posts.map((post, i) => (
+            <div key={post.id} className="post__box">
+              <Link to={`/posts/${post.id}`}>
+                <div className="post__profile-box">
+                  <div className="post__profile" />
+                  <div className="post__author-name">{post.email}</div>
+                  <div className="post__date">{post.createdAt}</div>
+                </div>
+                <div className="post__title">{post.title}</div>
+                <div className="post__text">{post.content}</div>
+              </Link>
+              {post.email === user?.email && (
+                <div className="post__utils-box">
+                  <div className="post__delete">삭제</div>
+                  <Link to={`/posts/edit/${post.id}`} className="post__edit">
+                    수정
+                  </Link>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="post__no-post">게시글이 없습니다.</div>
+        )}
       </div>
     </>
   );
