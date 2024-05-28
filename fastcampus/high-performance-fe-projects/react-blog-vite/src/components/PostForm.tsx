@@ -4,7 +4,7 @@ import { db } from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { PostProps } from "components/PostList";
+import { CATEGORIES, CategoryType, PostProps } from "components/PostList";
 
 export default function PostForm() {
   const params = useParams<{ id: string }>();
@@ -14,6 +14,7 @@ export default function PostForm() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState<CategoryType | string>("");
 
   const getPost = async (id: string) => {
     if (id) {
@@ -36,6 +37,7 @@ export default function PostForm() {
           title,
           summary,
           content,
+          category,
           updatedAt: new Date().toLocaleDateString("ko", {
             hour: "2-digit",
             minute: "2-digit",
@@ -50,6 +52,7 @@ export default function PostForm() {
           title,
           summary,
           content,
+          category,
           createdAt: new Date().toLocaleDateString("ko", {
             hour: "2-digit",
             minute: "2-digit",
@@ -66,7 +69,9 @@ export default function PostForm() {
     }
   };
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     if (name === "title") {
       setTitle(value);
@@ -76,6 +81,9 @@ export default function PostForm() {
     }
     if (name === "content") {
       setContent(value);
+    }
+    if (name === "category") {
+      setCategory(value);
     }
   };
 
@@ -90,6 +98,7 @@ export default function PostForm() {
       setTitle(post.title);
       setSummary(post.summary);
       setContent(post.content);
+      setCategory(post.category);
     }
   }, [post]);
 
@@ -105,6 +114,30 @@ export default function PostForm() {
           onChange={onChange}
           value={title}
         />
+      </div>
+      <div className="form__block">
+        <label htmlFor="category">카테고리</label>
+        {/* <input
+          type="text"
+          id="category"
+          name="category"
+          required
+          onChange={onChange}
+          value={category}
+        /> */}
+        <select
+          name="category"
+          id="category"
+          onChange={onChange}
+          defaultValue={category}
+        >
+          <option value="">카테고리를 선택해주세요</option>
+          {CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="form__block">
         <label htmlFor="summary">요약</label>
