@@ -1,29 +1,57 @@
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import AuthContext from "context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { PostProps } from "components/PostList";
 
 export default function PostForm() {
+  const params = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [post, setPost] = useState<PostProps | null>(null);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
 
+  const getPost = async (id: string) => {
+    if (id) {
+      const docRef = doc(db, "posts", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const dataObj = { ...docSnap.data(), id: docSnap.id };
+        setPost(dataObj as PostProps);
+      }
+    }
+  };
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // firestore 데이터 생성
-      const docRef = await addDoc(collection(db, "posts"), {
-        title,
-        summary,
-        content,
-        createdAt: new Date().toLocaleDateString(),
-        email: user?.email,
-      });
-      toast.success("게시글이 작성되었습니다.");
+      if (post) {
+        // firestore 데이터 수정
+        const postRef = doc(db, "posts", post.id);
+        await updateDoc(postRef, {
+          title,
+          summary,
+          content,
+          updatedAt: new Date().toLocaleDateString(),
+        });
+        toast.success("게시글이 수정되었습니다.");
+        navigate(`/posts/${post.id}`);
+      } else {
+        // firestore 데이터 생성
+        await addDoc(collection(db, "posts"), {
+          title,
+          summary,
+          content,
+          createdAt: new Date().toLocaleDateString(),
+          email: user?.email,
+          uid: user?.uid,
+        });
+        toast.success("게시글이 작성되었습니다.");
+      }
       navigate("/");
     } catch (e: any) {
       toast.error("게시글 작성에 실패했습니다.");
@@ -42,6 +70,20 @@ export default function PostForm() {
       setContent(value);
     }
   };
+
+  useEffect(() => {
+    if (params?.id) {
+      getPost(params.id);
+    }
+  }, [params?.id]);
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title);
+      setSummary(post.summary);
+      setContent(post.content);
+    }
+  }, [post]);
 
   return (
     <form onSubmit={onSubmit} className="form">
@@ -78,7 +120,7 @@ export default function PostForm() {
         />
       </div>
       <div className="form__block">
-        <input type="submit" value="제출" className="form__btn--submit" />
+        <input type="submit" value={post ? '수정' : "제출"} className="form__btn--submit" />
       </div>
     </form>
   );
