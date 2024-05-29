@@ -19,14 +19,14 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "pages/*": ["pages/*"],
+      "components/*": ["components/*"],
+      "firebaseApp/*": ["firebaseApp/*"],
+      "context/*": ["context/*"]
+    }
   },
   "include": ["src"],
-  "paths": {
-    "pages/*": ["pages/*"],
-    "components/*": ["components/*"],
-    "firebaseApp/*": ["firebaseApp/*"],
-    "context/*": ["context/*"]
-  },
   "references": [{ "path": "./tsconfig.node.json" }]
 }
