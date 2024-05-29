@@ -3,17 +3,12 @@ import AuthContext from "context/AuthContext";
 import {
   arrayRemove,
   arrayUnion,
-  deleteDoc,
   doc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { toast } from "react-toastify";
-
-const COMMENTS = [
-  { id: 1, email: "test@", content: "comment1", createdAt: "2021-10-10" },
-];
 
 interface CommentsProps {
   post: PostProps;

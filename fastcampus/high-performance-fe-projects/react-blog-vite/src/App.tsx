@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { app } from "firebaseApp";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Router from "./components/Router";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "components/Loader";
 import ThemeContext from "context/ThemeContext";
