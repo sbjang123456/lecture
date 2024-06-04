@@ -42,7 +42,7 @@ function App() {
 const Text = styled.p`
   color: ${({ theme }) => {
     // @ts-ignore
-    return theme.colors.gray[900];
+    return theme.colors.red[500];
   }};
 `;
 
