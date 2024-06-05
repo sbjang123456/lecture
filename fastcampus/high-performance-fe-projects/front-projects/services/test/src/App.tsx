@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { ThemeProvider } from "@emotion/react";
-import { vars } from "@sbjang/themes";
+import { vars, classes } from "@sbjang/themes";
 import styled from "@emotion/styled";
 
 const View = () => {
@@ -40,6 +40,7 @@ function App() {
 }
 
 const Text = styled.p`
+  ${classes.typography.heading["4xl"]};
   color: ${({ theme }) => {
     // @ts-ignore
     return theme.colors.red[500];
