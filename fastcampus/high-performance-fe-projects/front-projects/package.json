@@ -1,11 +1,20 @@
 {
   "name": "front-projects",
   "version": "0.0.0",
+  "workspaces": [
+    "packages/**/*",
+    "services/**/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "nx build",
+    "graph": "nx run-many --target=build --graph"
   },
   "volta": {
     "node": "18.17.1",
-    "npm": "9.6.7"
+    "yarn": "4.2.2"
+  },
+  "packageManager": "yarn@4.2.2",
+  "devDependencies": {
+    "nx": "16.8.1"
   }
 }
